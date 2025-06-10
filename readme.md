@@ -27,8 +27,11 @@ OUT AX
 
 HALT
 
+```
+
 ```bash
-Output:10
+Output: 10
+```
 
 ## Getting Started
 
