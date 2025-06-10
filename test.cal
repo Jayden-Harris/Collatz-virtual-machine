@@ -1,0 +1,9 @@
+START
+
+MOV AX, 20
+MOV BX, 10
+SUB AX, BX
+OUT AX
+
+HALT
+
