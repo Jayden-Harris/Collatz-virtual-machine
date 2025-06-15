@@ -69,39 +69,59 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
   std::cout << "Program Output: \n" << std::endl;
 
   while (ip < instructions.size()) {
-    int opcode = instructions[ip++];
+    OPCODES opcode = static_cast<OPCODES>(instructions[ip++]);
 
-    switch(opcode) {
-      case 5: { // MOV
+    switch (opcode) {
+      case OPCODES::START: {
+        // ignore start 
+        break; 
+      }
+
+      case OPCODES::MOV: {
         int reg = instructions[ip++];
         int val = instructions[ip++];
         vmstate.registers[reg] = val;
         break;
       }
 
-      case 6: { // ADD
+      case OPCODES::ADD: {
         int reg1 = instructions[ip++];
         int reg2 = instructions[ip++];
         vmstate.registers[reg1] += vmstate.registers[reg2];
         break;
       }
 
-      case 7: { // SUB
+      case OPCODES::SUB: {
         int reg1 = instructions[ip++];
         int reg2 = instructions[ip++];
         vmstate.registers[reg1] -= vmstate.registers[reg2];
         break;
       }
 
-      case 10: { // OUT
-        int reg = instructions[ip++];  // Register index to output
+      case OPCODES::OUT: {
+        int reg = instructions[ip++];
         int val = vmstate.registers[reg];
         std::cout << val << std::endl;
         break;
       }
 
-      case 11: { // HALT
+      case OPCODES::PUTS: {
+        int str_index = instructions[ip++] - 3;
+        if (str_index >= 0 && str_index < vmstate.string_memory.size()) {
+            std::cout << vmstate.string_memory[str_index] << std::endl;
+        } else {
+            std::cerr << "Invalid string index: " << (str_index + 3) << std::endl;
+        }
+        break;
+      }
+
+      case OPCODES::HALT: {
         std::cout << "\nProgram finished with exit code 0" << std::endl;
+        return; // exit the loop immediately
+      }
+
+      default: {
+        std::cerr << "Unknown opcode: " << static_cast<int>(opcode) << std::endl;
         break;
       }
     }

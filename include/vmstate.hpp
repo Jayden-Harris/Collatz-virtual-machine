@@ -6,12 +6,12 @@
 #include <iostream>
 
 enum class Registers : uint8_t {
-  AX = 13,
-  BX = 14,
-  CX = 15,
-  DX = 16,
-  IP = 17,
-  SP = 18,
+  AX = 20,
+  BX = 21,
+  CX = 22,
+  DX = 23,
+  IP = 24,
+  SP = 25
 };
 
 inline const std::unordered_map<std::string, Registers> registerMap = {
@@ -25,6 +25,7 @@ inline const std::unordered_map<std::string, Registers> registerMap = {
 
 struct VMstate {
   std::vector<std::string> memory;   
+  std::vector<std::string> string_memory; // for storing string literals 
   std::vector<int> registers;
   uint64_t pc;
 
@@ -36,12 +37,10 @@ void run_vm(VMstate& vmstate);
 
 uint8_t get_register_from_string(const std::string& reg_str);
 
-
+void execute_program(VMstate& vmstate, const std::vector<int> instructions);
 
 bool is_register(const std::string& token);
 
-std::vector<int> consume_collatz_binary(const std::vector<std::string>& paraties);
+std::vector<int> consume_collatz_binary(const std::vector<std::string>& collatz_binary);
 
 std::vector<std::string> clean_collatz_binary(const std::vector<std::string>& collatz_binary);
-
-void execute_program(VMstate& vmstate, std::vector<int> instructions);

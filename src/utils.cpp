@@ -24,16 +24,17 @@ std::string trim(const std::string& s) {
 
 // Function to split line into tokens by whitespace, ignoring commas
 std::vector<std::string> split_line(const std::string& line) {
-  std::vector<std::string> tokens;
-  std::istringstream stream(line);
-  std::string token;
-  while (stream >> token) {
-      // Remove trailing commas, if any
-      if (!token.empty() && token.back() == ',') {
-          token.pop_back();
-      }
-      tokens.push_back(trim(token));
+    std::vector<std::string> tokens;
+    std::istringstream stream(line);
+    std::string token;
+    while (stream >> token) {
+        // Remove trailing commas, if any
+        if (!token.empty() && token.back() == ',') {
+            token.pop_back();
+        }
+        tokens.push_back(trim(token));
+    }
+    return tokens;
   }
-  return tokens;
-}
+
 

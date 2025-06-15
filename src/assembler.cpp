@@ -8,7 +8,11 @@
 #include <unordered_map>
 #include <collatz.hpp>
 
-std::vector<int> parse_file_to_integers(const std::string& file_name) {
+bool is_quoted_string(const std::string& str) {
+  return str.size() >= 2 && str.front() == '"' && str.back() == '"';
+}
+
+std::vector<int> parse_file_to_integers(const std::string& file_name, VMstate& vmstate) {
   std::ifstream file(file_name);
 
   if (!file.is_open()) {
@@ -30,6 +34,10 @@ std::vector<int> parse_file_to_integers(const std::string& file_name) {
       } else if (is_register(token)) {
         int rgstr = get_register_from_string(token);
         integers.push_back(rgstr);
+      } else if (is_quoted_string(token)) {
+        std::string inner = token.substr(1, token.size() - 2); // fixed
+        vmstate.string_memory.push_back(inner);
+        integers.push_back(vmstate.string_memory.size() + 2); // offset by 3 total
       } else {
         integers.push_back(std::stoi(token));
       }
@@ -51,10 +59,9 @@ std::vector<std::string> generate_collatz_binary_code(const std::vector<int>& in
 };
 
 void assemble_cal_file(const std::string& file_name, VMstate& vmstate) {
-  std::vector<int> integers = parse_file_to_integers(file_name);
+  std::vector<int> integers = parse_file_to_integers(file_name, vmstate);
   std::vector<std::string> parities = generate_collatz_binary_code(integers);
 
   std::cout << "Loading binary into memory..." << std::endl;
   vmstate.memory = parities;
 }
-
