@@ -9,7 +9,6 @@ std::string char_vector_to_string(std::vector<char> chars) {
   return s;
 }
 
-// Helper to trim whitespace from both ends of a string
 std::string trim(const std::string& s) {
   auto start = s.begin();
   while (start != s.end() && std::isspace(*start)) {
@@ -22,7 +21,6 @@ std::string trim(const std::string& s) {
   return std::string(start, end + 1);
 }
 
-// Function to split line into tokens by whitespace, ignoring commas
 std::vector<std::string> split_line(const std::string& line) {
     std::vector<std::string> tokens;
     std::istringstream stream(line);

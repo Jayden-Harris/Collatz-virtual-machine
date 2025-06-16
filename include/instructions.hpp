@@ -18,6 +18,9 @@ enum class OPCODES : uint8_t {
   START = 12,
   MOV_STR = 13,
   PUTS = 14,
+  JMP = 15,
+  JNZ = 16,
+  MOV_REG = 17,
   UNK = 0 // default for uknown opcode 
 };
 
@@ -36,6 +39,9 @@ inline const std::unordered_map<std::string, OPCODES> opcodeMap = {
   {"MOV_STR", OPCODES::MOV_STR},
   {"PUTS", OPCODES::PUTS},
   {"UNK", OPCODES::UNK},
+  {"JMP", OPCODES::JMP},
+  {"JNZ", OPCODES::JNZ},
+  {"MOV_REG", OPCODES::MOV_REG},
 };
 
 void handle_LOAD();

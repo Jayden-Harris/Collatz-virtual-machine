@@ -62,8 +62,6 @@ std::vector<std::string> clean_collatz_binary(const std::vector<std::string>& co
   return cleaned;
 }
 
-
-// main program loop to read instructions and then execute code 
 void execute_program(VMstate& vmstate, std::vector<int> instructions) {
   size_t ip = 0;
   std::cout << "Program Output: \n" << std::endl;
@@ -73,7 +71,6 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
 
     switch (opcode) {
       case OPCODES::START: {
-        // ignore start 
         break; 
       }
 
@@ -115,9 +112,32 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
         break;
       }
 
+      case OPCODES::JMP: {
+		    int addr = instructions[ip++];
+		    ip = addr;
+		    continue;
+		  }
+
+      case OPCODES::JNZ: {
+        int reg = instructions[ip++];
+        int addr = instructions[ip++];
+        if (vmstate.registers[reg] != 0) {
+          ip = addr;
+          continue;
+        }
+        break;
+      }
+
       case OPCODES::HALT: {
         std::cout << "\nProgram finished with exit code 0" << std::endl;
-        return; // exit the loop immediately
+        return; 
+      }
+
+      case OPCODES::MOV_REG: {
+        int dest = instructions[ip++];
+        int src = instructions[ip++];
+        vmstate.registers[dest] = vmstate.registers[src];
+        break;
       }
 
       default: {
