@@ -10,14 +10,18 @@ std::string char_vector_to_string(std::vector<char> chars) {
 }
 
 std::string trim(const std::string& s) {
+  if (s.empty()) return "";
+
   auto start = s.begin();
   while (start != s.end() && std::isspace(*start)) {
       start++;
   }
+
   auto end = s.end();
   do {
       end--;
   } while (std::distance(start, end) > 0 && std::isspace(*end));
+
   return std::string(start, end + 1);
 }
 

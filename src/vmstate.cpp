@@ -27,7 +27,7 @@ void run_vm(VMstate& vmstate) {
   std::vector<std::string> collatz_binary = vmstate.memory;
   std::vector<std::string> cleaned_binary = clean_collatz_binary(collatz_binary);
   std::vector<int> instructions = consume_collatz_binary(cleaned_binary);
-
+  
   execute_program(vmstate, instructions);
   
 }
@@ -67,11 +67,12 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
   std::cout << "Program Output: \n" << std::endl;
 
   while (ip < instructions.size()) {
+    
     OPCODES opcode = static_cast<OPCODES>(instructions[ip++]);
 
     switch (opcode) {
       case OPCODES::START: {
-        break; 
+        break;
       }
 
       case OPCODES::MOV: {
@@ -130,13 +131,20 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
 
       case OPCODES::HALT: {
         std::cout << "\nProgram finished with exit code 0" << std::endl;
-        return; 
+        return;
       }
 
       case OPCODES::MOV_REG: {
         int dest = instructions[ip++];
         int src = instructions[ip++];
         vmstate.registers[dest] = vmstate.registers[src];
+        break;
+      }
+
+      case OPCODES::AND: {
+        int reg1 = instructions[ip++];
+        int reg2 = instructions[ip++];
+        vmstate.registers[reg1] &= vmstate.registers[reg2];
         break;
       }
 

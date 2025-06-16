@@ -11,7 +11,10 @@ enum class Registers : uint8_t {
   CX = 22,
   DX = 23,
   IP = 24,
-  SP = 25
+  SP = 25,
+  EX = 26,
+  FX = 27,
+  GX = 28,
 };
 
 inline const std::unordered_map<std::string, Registers> registerMap = {
@@ -19,6 +22,9 @@ inline const std::unordered_map<std::string, Registers> registerMap = {
   {"BX", Registers::BX},
   {"CX", Registers::CX},
   {"DX", Registers::DX},
+  {"EX", Registers::EX},
+  {"FX", Registers::FX},
+  {"GX", Registers::GX},
   {"IP", Registers::IP},
   {"SP", Registers::SP}
 };

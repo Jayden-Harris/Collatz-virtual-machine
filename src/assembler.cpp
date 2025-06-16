@@ -19,6 +19,7 @@ std::vector<std::string> generate_collatz_binary_code(const std::vector<int>& in
     std::string parity = generate_collatz_parity(i);
     parities.push_back(parity + "11");
   }
+
   return parities;
 }
 
@@ -34,13 +35,8 @@ std::vector<int> assemble_file_to_instructions(const std::string& file_name, VMs
   int total_instruction_count = 0;
   auto label_table = collect_labels_and_lines(file_name, lines, total_instruction_count);
 
-  if (label_table.empty() && !lines.empty()) {
-      // An error occurred during label collection (e.g. duplicate label)
+  if (label_table.empty() && lines.empty()) {
       return {};
-  }
-
-  for (const auto& [label, addr] : label_table) {
-      std::cout << "Label '" << label << "' at instruction " << addr << std::endl;
   }
 
   std::vector<int> instructions;
@@ -57,6 +53,11 @@ std::vector<int> assemble_file_to_instructions(const std::string& file_name, VMs
           return {};
       }
   }
+
+  for (int i : instructions) {
+      std::cout << i << " ";
+  }
+  std::cout << std::endl;
 
   return instructions;
 }
@@ -107,32 +108,53 @@ bool process_tokens_to_instructions(
 ) {
   if (tokens.empty()) return true;
 
-  if (tokens[0] == "MOV" && tokens.size() == 3 && is_register(tokens[1]) && is_register(tokens[2])) {
+  std::vector<std::string> cleaned_tokens;
+  for (auto token : tokens) {
+    if (!token.empty() && token.back() == ',') {
+      token.pop_back();
+    }
+    cleaned_tokens.push_back(token);
+  }
+
+  std::cout << "Processing tokens: ";
+  for (const auto& t : cleaned_tokens) std::cout << "[" << t << "] ";
+  std::cout << std::endl;
+
+  // Special case for MOV reg, reg
+  if (cleaned_tokens[0] == "MOV" && cleaned_tokens.size() == 3 && is_register(cleaned_tokens[1]) && is_register(cleaned_tokens[2])) {
+      std::cout << "Detected MOV_REG instruction\n";
       instructions.push_back(static_cast<int>(OPCODES::MOV_REG));
-      instructions.push_back(get_register_from_string(tokens[1]));
-      instructions.push_back(get_register_from_string(tokens[2]));
+      instructions.push_back(get_register_from_string(cleaned_tokens[1]));
+      instructions.push_back(get_register_from_string(cleaned_tokens[2]));
       return true;
   }
 
-  for (const auto& token : tokens) {
+  for (const auto& token : cleaned_tokens) {
       if (is_opcode(token)) {
+          std::cout << "Token is opcode: " << token << std::endl;
           instructions.push_back(get_opcode_from_string(token));
       } else if (is_register(token)) {
+          std::cout << "Token is register: " << token << std::endl;
           instructions.push_back(get_register_from_string(token));
       } else if (is_quoted_string(token)) {
           std::string inner = token.substr(1, token.size() - 2);
           vmstate.string_memory.push_back(inner);
+          std::cout << "Token is quoted string: " << inner << std::endl;
           instructions.push_back(static_cast<int>(vmstate.string_memory.size()) + 2);
       } else if (label_table.count(token)) {
+          std::cout << "Token is label: " << token << std::endl;
           instructions.push_back(label_table.at(token));
       } else {
           try {
-              instructions.push_back(std::stoi(token));
+              int val = std::stoi(token);
+              std::cout << "Token is integer: " << val << std::endl;
+              instructions.push_back(val);
           } catch (...) {
               std::cerr << "Error: Invalid token '" << token << "' in line: " << original_line << std::endl;
               return false;
           }
       }
   }
+  std::cout << "Instructions vector size now: " << instructions.size() << std::endl;
   return true;
 }
