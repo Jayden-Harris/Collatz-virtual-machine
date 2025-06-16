@@ -46,17 +46,6 @@ inline const std::unordered_map<std::string, OPCODES> opcodeMap = {
   {"AND", OPCODES::AND},
 };
 
-void handle_LOAD();
-void handle_STORE();
-void handle_MOV();
-void handle_ADD();
-void handle_SUB();
-void handle_MUL();
-void handle_DIV();
-void handle_OUT();
-void handle_HALT();
-void handle_START();
-
 uint8_t get_opcode_from_string(const std::string& s);
 
 bool is_opcode(const std::string& token);
