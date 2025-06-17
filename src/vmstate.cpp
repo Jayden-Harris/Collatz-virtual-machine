@@ -27,9 +27,7 @@ void run_vm(VMstate& vmstate) {
   std::vector<std::string> collatz_binary = vmstate.memory;
   std::vector<std::string> cleaned_binary = clean_collatz_binary(collatz_binary);
   std::vector<int> instructions = consume_collatz_binary(cleaned_binary);
-  
   execute_program(vmstate, instructions);
-  
 }
 
 std::vector<int> consume_collatz_binary(const std::vector<std::string>& collatz_binary) {
@@ -106,13 +104,38 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
       case OPCODES::PUTS: {
         int str_index = instructions[ip++] - 3;
         if (str_index >= 0 && str_index < vmstate.string_memory.size()) {
-            std::cout << vmstate.string_memory[str_index] << std::endl;
+            std::cout << vmstate.string_memory[str_index];
         } else {
             std::cerr << "Invalid string index: " << (str_index + 3) << std::endl;
         }
         break;
       }
 
+      case OPCODES::GETS: {
+        int reg = instructions[ip++];              // e.g., AX
+        std::string input_line;
+        std::getline(std::cin >> std::ws, input_line);  // read whole line
+
+        vmstate.string_memory.push_back(input_line);    // store it
+        int str_index = vmstate.string_memory.size() - 1;
+
+        vmstate.registers[reg] = str_index;  // store the index into the register!
+        break;
+      }
+
+      case OPCODES::PSTR: {
+        int reg = instructions[ip++];
+        int str_index = vmstate.registers[reg];
+
+        if (str_index >= 0 && str_index < vmstate.string_memory.size()) {
+            std::cout << vmstate.string_memory[str_index] << std::endl;
+        } else {
+            std::cerr << "Invalid string index in register " << reg << std::endl;
+        }
+        break;
+      }
+
+      
       case OPCODES::JMP: {
 		    int addr = instructions[ip++];
 		    ip = addr;

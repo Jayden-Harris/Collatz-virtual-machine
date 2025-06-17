@@ -27,16 +27,35 @@ std::string trim(const std::string& s) {
 
 std::vector<std::string> split_line(const std::string& line) {
     std::vector<std::string> tokens;
-    std::istringstream stream(line);
-    std::string token;
-    while (stream >> token) {
-        // Remove trailing commas, if any
-        if (!token.empty() && token.back() == ',') {
-            token.pop_back();
+    std::string current_token;
+    bool in_quotes = false;
+
+    for (size_t i = 0; i < line.size(); ++i) {
+        char c = line[i];
+
+        if (c == '"') {
+            current_token += c;
+            in_quotes = !in_quotes; 
         }
-        tokens.push_back(trim(token));
+        else if (std::isspace(c) && !in_quotes) {
+            if (!current_token.empty()) {
+                // Remove trailing commas if any
+                if (current_token.back() == ',') current_token.pop_back();
+                tokens.push_back(current_token);
+                current_token.clear();
+            }
+        }
+        else {
+            current_token += c;
+        }
     }
+
+    if (!current_token.empty()) {
+        if (current_token.back() == ',') current_token.pop_back();
+        tokens.push_back(current_token);
+    }
+
     return tokens;
-  }
+}
 
 

@@ -27,7 +27,7 @@ void assemble_cal_file(const std::string& file_name, VMstate& vmstate) {
   std::vector<int> integers = assemble_file_to_instructions(file_name, vmstate);
   std::vector<std::string> parities = generate_collatz_binary_code(integers);
   std::cout << "Loading binary into memory..." << std::endl;
-  vmstate.memory = parities;
+  vmstate.memory = parities; 
 }
 
 std::vector<int> assemble_file_to_instructions(const std::string& file_name, VMstate& vmstate) {
@@ -53,11 +53,6 @@ std::vector<int> assemble_file_to_instructions(const std::string& file_name, VMs
           return {};
       }
   }
-
-  for (int i : instructions) {
-      std::cout << i << " ";
-  }
-  std::cout << std::endl;
 
   return instructions;
 }
@@ -116,13 +111,7 @@ bool process_tokens_to_instructions(
     cleaned_tokens.push_back(token);
   }
 
-  std::cout << "Processing tokens: ";
-  for (const auto& t : cleaned_tokens) std::cout << "[" << t << "] ";
-  std::cout << std::endl;
-
-  // Special case for MOV reg, reg
   if (cleaned_tokens[0] == "MOV" && cleaned_tokens.size() == 3 && is_register(cleaned_tokens[1]) && is_register(cleaned_tokens[2])) {
-      std::cout << "Detected MOV_REG instruction\n";
       instructions.push_back(static_cast<int>(OPCODES::MOV_REG));
       instructions.push_back(get_register_from_string(cleaned_tokens[1]));
       instructions.push_back(get_register_from_string(cleaned_tokens[2]));
@@ -131,23 +120,20 @@ bool process_tokens_to_instructions(
 
   for (const auto& token : cleaned_tokens) {
       if (is_opcode(token)) {
-          std::cout << "Token is opcode: " << token << std::endl;
           instructions.push_back(get_opcode_from_string(token));
       } else if (is_register(token)) {
-          std::cout << "Token is register: " << token << std::endl;
           instructions.push_back(get_register_from_string(token));
       } else if (is_quoted_string(token)) {
           std::string inner = token.substr(1, token.size() - 2);
           vmstate.string_memory.push_back(inner);
-          std::cout << "Token is quoted string: " << inner << std::endl;
-          instructions.push_back(static_cast<int>(vmstate.string_memory.size()) + 2);
+
+          int str_index = static_cast<int>(vmstate.string_memory.size()) - 1;
+          instructions.push_back(str_index + 3);
       } else if (label_table.count(token)) {
-          std::cout << "Token is label: " << token << std::endl;
           instructions.push_back(label_table.at(token));
       } else {
           try {
               int val = std::stoi(token);
-              std::cout << "Token is integer: " << val << std::endl;
               instructions.push_back(val);
           } catch (...) {
               std::cerr << "Error: Invalid token '" << token << "' in line: " << original_line << std::endl;
@@ -155,6 +141,5 @@ bool process_tokens_to_instructions(
           }
       }
   }
-  std::cout << "Instructions vector size now: " << instructions.size() << std::endl;
   return true;
 }

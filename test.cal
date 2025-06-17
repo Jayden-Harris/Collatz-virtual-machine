@@ -1,17 +1,10 @@
+
+
 START
 
-MOV AX, 11
-MOV BX, 1
+PUTS "Command> "
+GETS AX
+PUTS "Running command: "
+PSTR AX
 
-AND AX, BX
-JNZ AX, ODD
-
-EVEN:
-  PUTS "even"
-  JMP EXIT
-
-ODD:
-  PUTS "odd"
-
-EXIT:
-  HALT
+HALT

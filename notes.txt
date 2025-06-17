@@ -2,3 +2,116 @@
 loop through 1 to 10
 print even if even
 print odd if odd
+
+; Initialize registers
+MOV AX, 1        ; AX = counter (starts at 1)
+MOV BX, 10       ; BX = limit (10)
+MOV CX, 1        ; CX = constant 1 (used for both increment and AND)
+
+; -------------------------
+LOOP_START:
+
+; --- Check if we reached the limit ---
+MOV DX, BX       ; DX = BX
+SUB DX, AX       ; DX = BX - AX
+JNZ DX, CONTINUE ; If DX != 0, we haven't reached limit
+JMP END_LOOP     ; If DX == 0, exit loop
+
+; --- Main body of loop ---
+CONTINUE:
+
+; Check even or odd using bitwise AND
+MOV DX, AX       ; DX = AX
+AND DX, CX       ; DX = AX & 1
+JNZ DX, IS_ODD   ; If result != 0, it's odd
+
+; Even branch
+MOV_STR R0, "even"
+PUTS R0
+JMP PRINT_NUMBER
+
+IS_ODD:
+MOV_STR R0, "odd"
+PUTS R0
+
+; --- Print the number ---
+PRINT_NUMBER:
+OUT AX
+
+; Increment AX by 1
+ADD AX, CX
+
+; Repeat loop
+JMP LOOP_START
+
+; --- Exit ---
+END_LOOP:
+HALT
+
+case OPCODES::GETS: {
+    int reg = instructions[ip++]; // The register holding the memory address
+    int addr = vmstate.registers[reg]; // Fetch memory address from register
+
+    std::string input_line;
+    std::getline(std::cin, input_line); // Get full line from user
+
+    // Store each character into simulated memory
+    for (size_t i = 0; i < input_line.size(); ++i) {
+        if ((addr + i) < vmstate.memory.size()) {
+            vmstate.memory[addr + i] = static_cast<uint8_t>(input_line[i]);
+        } else {
+            std::cerr << "Memory overflow in GETS\n";
+            break;
+        }
+    }
+
+    // Optionally: null-terminate the string (like C)
+    if ((addr + input_line.size()) < vmstate.memory.size()) {
+        vmstate.memory[addr + input_line.size()] = 0;
+    }
+
+    break;
+}
+
+🔹 1. Parser
+Input: raw CAL code (std::string)
+Output: vector of tokens
+Responsibilities:
+Strip comments
+Normalize whitespace
+Handle labels, keywords, and values
+Pass to tokenizer
+Think of this like the high-level syntactic wrangler.
+
+🔹 2. Tokenizer
+Input: cleaned lines or instruction strings
+Output: Token structs (type, value, maybe position info)
+Responsibilities:
+Identify opcodes vs operands
+Validate register names, numbers, labels
+Track instruction positions if needed (for jumps)
+Mark labels with their instruction address
+Treat this like a lexical analyzer. The output here becomes like an intermediate representation.
+struct Token {
+    enum class Type { OPCODE, REGISTER, IMMEDIATE, LABEL_DEF, LABEL_REF };
+    Type type;
+    std::string value;
+};
+
+🔹 3. Assembler
+Input: list of tokens
+Output: final std::vector<int> or std::vector<uint8_t> of opcodes + operands
+Responsibilities:
+Convert opcodes like "MOV" → 5
+Map labels to numeric addresses
+Resolve register names to indices
+Collapse high-level tokens into raw instruction stream
+It’s the low-level converter: from readable CAL to raw bytecode.
+
+🔹 4. VM Execution
+Input: bytecode (std::vector<int>) + VMstate
+Responsibilities:
+Run opcode loop (while(ip < ...))
+Modify memory and registers
+Perform string ops, I/O, math, flow control
+Basically your run_vm() function right now.
