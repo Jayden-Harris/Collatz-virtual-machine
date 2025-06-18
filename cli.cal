@@ -1,0 +1,11 @@
+
+
+START
+
+INPUT_LOOP:
+  PUTS "user@collatz> "
+  GETS_STR AX
+  EXC AX
+  JMP INPUT_LOOP
+
+HALT

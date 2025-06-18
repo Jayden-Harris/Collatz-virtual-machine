@@ -22,8 +22,11 @@ enum class OPCODES : uint8_t {
   JNZ = 16,
   MOV_REG = 17,
   AND = 18,
-  GETS = 19,
+  GETS_STR = 19,
   PSTR = 35,
+  EXC = 36,
+  CMP_STR = 37,
+  GETS_INT = 38,
   UNK = 0 // default for uknown opcode 
 };
 
@@ -46,8 +49,11 @@ inline const std::unordered_map<std::string, OPCODES> opcodeMap = {
   {"JNZ", OPCODES::JNZ},
   {"MOV_REG", OPCODES::MOV_REG},
   {"AND", OPCODES::AND},
-  {"GETS", OPCODES::GETS},
+  {"GETS_STR", OPCODES::GETS_STR},
   {"PSTR", OPCODES::PSTR},
+  {"EXC", OPCODES::EXC},
+  {"CMP_STR", OPCODES::CMP_STR},
+  {"GETS_INT", OPCODES::GETS_INT},
 };
 
 uint8_t get_opcode_from_string(const std::string& s);

@@ -124,7 +124,25 @@ bool process_tokens_to_instructions(
       } else if (is_register(token)) {
           instructions.push_back(get_register_from_string(token));
       } else if (is_quoted_string(token)) {
-          std::string inner = token.substr(1, token.size() - 2);
+          std::string raw = token.substr(1, token.size() - 2);
+          std::string inner;
+
+          for (size_t i = 0; i < raw.length(); ++i) {
+              if (raw[i] == '\\' && i + 1 < raw.length()) {
+                  char next = raw[i + 1];
+                  switch (next) {
+                      case 'n': inner += '\n'; break;
+                      case 't': inner += '\t'; break;
+                      case 'r': inner += '\r'; break;
+                      case '\\': inner += '\\'; break;
+                      case '"': inner += '"'; break;
+                      default: inner += next; break; 
+                  }
+                  i++; 
+              } else {
+                  inner += raw[i];
+              }
+          }
           vmstate.string_memory.push_back(inner);
 
           int str_index = static_cast<int>(vmstate.string_memory.size()) - 1;

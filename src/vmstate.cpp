@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "instructions.hpp"
+#include "command_line.hpp"
 
 uint8_t get_register_from_string(const std::string& reg_str) {
   auto it = registerMap.find(reg_str);
@@ -103,7 +104,7 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
 
       case OPCODES::PUTS: {
         int str_index = instructions[ip++] - 3;
-        if (str_index >= 0 && str_index < vmstate.string_memory.size()) {
+        if (str_index >= 0 && static_cast<size_t>(str_index) < vmstate.string_memory.size()) {
             std::cout << vmstate.string_memory[str_index];
         } else {
             std::cerr << "Invalid string index: " << (str_index + 3) << std::endl;
@@ -111,15 +112,27 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
         break;
       }
 
-      case OPCODES::GETS: {
-        int reg = instructions[ip++];              // e.g., AX
+      case OPCODES::GETS_STR: {
+        int reg = instructions[ip++];              
         std::string input_line;
-        std::getline(std::cin >> std::ws, input_line);  // read whole line
+        std::getline(std::cin >> std::ws, input_line);  
 
-        vmstate.string_memory.push_back(input_line);    // store it
+        vmstate.string_memory.push_back(input_line);  
         int str_index = vmstate.string_memory.size() - 1;
 
-        vmstate.registers[reg] = str_index;  // store the index into the register!
+        vmstate.registers[reg] = str_index;  
+        break;
+      }
+
+      case OPCODES::GETS_INT: {
+         int reg = instructions[ip++];
+        std::string input_line;
+        std::getline(std::cin >> std::ws, input_line);
+        try {
+            vmstate.registers[reg] = std::stoi(input_line);
+        } catch (...) {
+            vmstate.registers[reg] = 0;
+        }
         break;
       }
 
@@ -127,14 +140,13 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
         int reg = instructions[ip++];
         int str_index = vmstate.registers[reg];
 
-        if (str_index >= 0 && str_index < vmstate.string_memory.size()) {
+        if (str_index >= 0 && static_cast<size_t>(str_index) < vmstate.string_memory.size()) {
             std::cout << vmstate.string_memory[str_index] << std::endl;
         } else {
             std::cerr << "Invalid string index in register " << reg << std::endl;
         }
         break;
       }
-
       
       case OPCODES::JMP: {
 		    int addr = instructions[ip++];
@@ -152,11 +164,6 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
         break;
       }
 
-      case OPCODES::HALT: {
-        std::cout << "\nProgram finished with exit code 0" << std::endl;
-        return;
-      }
-
       case OPCODES::MOV_REG: {
         int dest = instructions[ip++];
         int src = instructions[ip++];
@@ -169,6 +176,43 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
         int reg2 = instructions[ip++];
         vmstate.registers[reg1] &= vmstate.registers[reg2];
         break;
+      }
+
+      case OPCODES::EXC: {
+        int reg = instructions[ip++];
+        int str_index = vmstate.registers[reg];
+        std::string command;
+
+        if (str_index >= 0 && static_cast<size_t>(str_index) < vmstate.string_memory.size()) {
+           command = vmstate.string_memory[str_index];
+           if (command == "exit") {
+            return;
+           } else {
+            execute_command(command);
+           }
+          }else {
+              std::cerr << "Invalid string index in register " << reg << std::endl;
+          }
+
+        break;
+      }
+
+      case OPCODES::MOV_STR: {
+        int reg = instructions[ip++];
+        int str_index = instructions[ip++] - 3; 
+
+        if (str_index < 0 || str_index >= (int)vmstate.string_memory.size()) {
+            std::cerr << "MOV_STR: Invalid string index " << str_index << std::endl;
+            break;
+        }
+
+        vmstate.registers[reg] = str_index;
+        break;
+      }
+
+      case OPCODES::HALT: {
+        std::cout << "\nProgram finished with exit code 0" << std::endl;
+        return;
       }
 
       default: {
