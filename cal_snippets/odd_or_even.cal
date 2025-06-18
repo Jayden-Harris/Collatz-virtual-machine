@@ -1,0 +1,18 @@
+START
+
+MOV AX, 11 ;number to check
+MOV BX, 1 ; bitmask
+
+AND AX, BX ; bitwise operation
+JNZ AX, ODD ; jump if AX is not 0 (odd)
+JMP EVEN ; skip odd and jump to EVEN tag (AX is 1)
+
+ODD:
+  PUTS "Odd"
+  JMP END
+
+EVEN:
+  PUTS "Even"
+
+END:
+  HALT

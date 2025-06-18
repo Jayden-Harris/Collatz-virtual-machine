@@ -1,0 +1,17 @@
+START
+
+MOV_STR AX, "Test" ; store string 1
+MOV_STR BX, "Test" ; store string 2
+CMP_STR CX, AX, BX ; compare strings. Store return int in CX
+JNZ CX, SAME ; jump to strings being the same if CX is not 0
+JMP DIFF ; skip same and jmp to diff as strings are different (CX is 1)
+
+SAME:
+  PUTS "Strings are the same"
+  JMP END
+
+DIFF:
+  PUTS "Strings are different"
+
+END:
+  HALT

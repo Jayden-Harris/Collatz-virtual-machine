@@ -1,0 +1,14 @@
+START
+
+MOV AX, 1 ; Start
+MOV BX, 11 ; Limit
+MOV DX, 1 ; increment value
+
+LOOP:
+  OUT AX ; print current
+  ADD AX, DX ; AX + DX = AX++
+  MOV CX, AX ; Copy AX to CX for comparison
+  SUB CX, BX ; compare start to limit 
+  JNZ CX, LOOP ; iterate as long as limit is > 0
+
+HALT
