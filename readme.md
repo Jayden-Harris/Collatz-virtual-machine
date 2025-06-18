@@ -8,10 +8,10 @@ This project explores novel encoding techniques inspired by the Collatz conjectu
 ## Features
 
 - **Custom Instruction Set**: Design and run programs with a simple assembly-like language (`.cal` files).  
+- **Custom parser and assembler**: Parse CAL code into parity strings from collatz and store in collatz virtual machine (CVM) memory.
 - **Collatz Parity Encoding (CPE)**: Encode and decode binary instructions using Collatz parity sequences.  
 - **Assembler & Runtime**: Compile `.cal` source files into a collatz binary parity string which is stored in memory and then execute by the VM
-- **Modular Codebase**: Organized into separate modules for VM, assembler, Collatz encoding, I/O, and utilities.  
-- **Extensible Architecture**: Easy to add new instructions, I/O devices, and debugging tools.
+- **Modular Codebase**: Organized into separate modules for VM, assembler, Collatz encoding and utilities.  
 
 ---
 
