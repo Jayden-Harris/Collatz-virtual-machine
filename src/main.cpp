@@ -20,7 +20,13 @@ int main(int argc, char* argv[]) {
 
   std::cout << "Assembling file: " << file_name << std::endl;
 
-  assemble_cal_file(file_name, vmstate);
+  bool is_rewrite_enabled = true;
+
+  if (is_rewrite_enabled) {
+
+  } else {
+      assemble_cal_file(file_name, vmstate);
+  }
 
   run_vm(vmstate);
 

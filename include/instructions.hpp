@@ -27,7 +27,8 @@ enum class OPCODES : uint8_t {
   EXC = 36,
   CMP_STR = 37,
   GETS_INT = 38,
-  UNK = 0 // default for uknown opcode 
+  SYS_CALL = 39,
+  UNK = 0 
 };
 
 // Declare the opcode map as inline to avoid multiple definition errors

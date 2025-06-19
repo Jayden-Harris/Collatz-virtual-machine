@@ -210,6 +210,25 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
         break;
       }
 
+      case OPCODES::CMP_STR: {
+        int dest = instructions[ip++];
+        int reg1 = instructions[ip++];
+        int reg2 = instructions[ip++];
+
+        int idx1 = vmstate.registers[reg1];
+        int idx2 = vmstate.registers[reg2];
+
+        bool result = false;
+
+        if (idx1 >= 0 && idx1 < (int)vmstate.string_memory.size() && idx2 >= 0 && idx2 < (int)vmstate.string_memory.size()) {
+          result = (vmstate.string_memory[idx1] == vmstate.string_memory[idx2]);
+        }
+
+        vmstate.registers[dest] = result ? 1 : 0;
+        break;
+
+      }
+
       case OPCODES::HALT: {
         std::cout << "\nProgram finished with exit code 0" << std::endl;
         return;

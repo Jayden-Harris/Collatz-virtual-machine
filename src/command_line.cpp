@@ -9,7 +9,6 @@
 void execute_command(std::string& command) {
   if (command == "ldir") {
     std::vector<std::filesystem::directory_entry> directories = list_directories("");
-    std::cout <<
     for (const auto& entry : directories) {
       std::cout << entry.path().filename().string() << std::endl;
     }
