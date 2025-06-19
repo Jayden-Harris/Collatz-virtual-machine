@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CVM Documentation</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background-color: #1e1e2f;
+      color: white;
+      width: 220px;
+      padding: 1.5em;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      position: fixed;
+      height: 100vh;
+    }
+
+    .sidebar h2 {
+      margin-top: 0;
+      font-size: 1.5em;
+    }
+
+    .sidebar nav {
+      margin-top: 2em;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar nav a {
+      color: #bbb;
+      text-decoration: none;
+      margin-bottom: 1em;
+      transition: color 0.2s ease;
+    }
+
+    .sidebar nav a:hover {
+      color: white;
+    }
+
+    .sidebar nav a.active {
+      color: white;
+      font-weight: bold;
+    }
+
+    .content {
+      margin-left: 240px;
+      padding: 2em;
+      max-width: 800px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+    }
+
+    .subtitle {
+      font-size: 1.1em;
+      color: #666;
+      margin-bottom: 1em;
+    }
+
+    .intro-box {
+      background-color: #e0f7fa;
+      padding: 1em;
+      border-left: 5px solid #00acc1;
+      margin: 1.5em 0;
+      border-radius: 4px;
+    }
+
+    section h2 {
+      margin-top: 2em;
+      font-size: 1.4em;
+    }
+
+    section ul {
+      padding-left: 1.2em;
+      line-height: 1.6;
+    }
+
+    @media screen and (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>CVM Docs</h2>
+      <nav>
+        <a href="index.html" class="active">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="instruction-set.html">Instruction Set</a>
+        <a href="syscalls.html">Syscalls</a>
+        <a href="examples.html">Examples</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header>
+        <h1>Welcome to CVM</h1>
+        <p class="subtitle">The Collatz Virtual Machine</p>
+      </header>
+
+      <section class="intro-box">
+        <p>The <strong>Collatz Virtual Machine (CVM)</strong> is the runtime environment for executing programs written in <strong>CAL</strong> (Collatz Assembly Language). It provides a minimalist register-based CPU model with a custom instruction set and syscall interface.</p>
+      </section>
+
+      <section>
+        <h2>What is CVM?</h2>
+        <p>CVM simulates a virtual processor that interprets and executes bytecode generated from CAL source code. It’s designed to explore symbolic computation and low-level control flow inspired by the Collatz conjecture.</p>
+      </section>
+
+      <section>
+        <h2>Key Components</h2>
+        <ul>
+          <li>Register-based CPU architecture</li>
+          <li>Instruction decoding and execution engine</li>
+          <li>System call interface for I/O and system operations</li>
+          <li>Memory model and stack management</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Getting Started</h2>
+        <p>Use the sidebar navigation to explore CVM architecture, instructions, syscalls, and example programs.</p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
