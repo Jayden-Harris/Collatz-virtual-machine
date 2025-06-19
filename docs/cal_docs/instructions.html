@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CAL Instructions</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: fixed;
+      width: 220px;
+      height: 100vh;
+      background-color: #1e1e2f;
+      color: white;
+      padding: 1.5em;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar h2 {
+      margin-top: 0;
+      font-size: 1.5em;
+    }
+
+    .sidebar nav {
+      margin-top: 2em;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar nav a {
+      color: #bbb;
+      text-decoration: none;
+      margin-bottom: 1em;
+      transition: color 0.2s ease;
+    }
+
+    .sidebar nav a:hover {
+      color: white;
+    }
+
+    .sidebar nav a.active {
+      color: white;
+      font-weight: bold;
+    }
+
+    .content {
+      margin-left: 260px; /* sidebar width + gap */
+      padding: 2em;
+      max-width: 800px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+    }
+
+    .subtitle {
+      font-size: 1.1em;
+      color: #666;
+      margin-bottom: 1em;
+    }
+
+    section h2 {
+      margin-top: 2em;
+      font-size: 1.6em;
+      border-bottom: 2px solid #00acc1;
+      padding-bottom: 0.3em;
+      margin-bottom: 1em;
+    }
+
+    ul {
+      line-height: 1.6;
+    }
+
+    code {
+      background-color: #eaeaea;
+      padding: 0.15em 0.3em;
+      border-radius: 3px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    ul li a {
+      color: #007c91;
+      text-decoration: none;
+    }
+
+    ul li a:hover {
+      text-decoration: underline;
+    }
+
+    /* Instruction + example blocks */
+    .instruction-example {
+      display: flex;
+      gap: 1.5em;
+      margin-bottom: 2.5em;
+      flex-wrap: wrap;
+    }
+
+    .instruction-info {
+      flex: 1 1 250px;
+      min-width: 250px;
+    }
+
+    .instruction-info h3 {
+      margin-top: 0;
+      color: #007c91;
+    }
+
+    .instruction-info p {
+      font-size: 1em;
+      line-height: 1.4;
+    }
+
+    pre.instruction-code {
+      flex: 1 1 300px;
+      background: #272822;
+      color: #f8f8f2;
+      padding: 1em;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-width: 300px;
+      box-shadow: 0 0 10px rgba(0,172,193,0.4);
+      user-select: all;
+    }
+
+    /* Responsive tweaks */
+    @media screen and (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .content {
+        margin-left: 0;
+        max-width: 100%;
+      }
+
+      .instruction-example {
+        flex-direction: column;
+      }
+
+      .instruction-info, pre.instruction-code {
+        min-width: auto;
+        flex: 1 1 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>CAL Docs</h2>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="registers.html">Registers</a>
+        <a href="instructions.html" class="active">Instructions</a>
+        <a href="syntax.html">Syntax</a>
+        <a href="syscalls.html">Syscalls</a>
+        <a href="examples.html">Examples</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header>
+        <h1>CAL Instructions</h1>
+        <p class="subtitle">Learn how to write and use CAL instructions effectively</p>
+      </header>
+
+      <section>
+        <h2>Instruction operation codes</h2>
+        <ul>
+          <li><a href="#MOV"><code>MOV</code></a> (5) - Move data between registers or memory</li>
+          <li><a href="#ADD"><code>ADD</code></a> (6) - Add two values</li>
+          <li><a href="#SUB"><code>SUB</code></a> (7) - Subtract one value from another</li>
+          <li><a href="#MUL"><code>MUL</code></a> (8) - Multiply two values</li>
+          <li><a href="#DIV"><code>DIV</code></a> (9) - Divide two values</li>
+          <li><a href="#OUT"><code>OUT</code></a> (10) - Print an integer stored in a register</li>
+          <li><a href="#HALT"><code>HALT</code></a> (11) - Stop program execution</li>
+          <li><a href="#START"><code>START</code></a> (12) - Program entry point</li>
+          <li><a href="#MOV_STR"><code>MOV_STR</code></a> (13) - Move a string value into a register</li>
+          <li><a href="#PUTS"><code>PUTS</code></a> (14) - Output a string literal to console</li>
+          <li><a href="#JMP"><code>JMP</code></a> (15) - Jump to a specified label</li>
+          <li><a href="#JNZ"><code>JNZ</code></a> (16) - Jump if not zero</li>
+          <li><a href="#AND"><code>AND</code></a> (18) - Bitwise AND operation</li>
+          <li><a href="#GETS_STR"><code>GETS_STR</code></a> (19) - Get input string</li>
+          <li><a href="#PSTR"><code>PSTR</code></a> (35) - Print a string stored in a register</li>
+          <li><a href="#CMP_STR"><code>CMP_STR</code></a> (37) - Compare two strings</li>
+          <li><a href="#GETS_INT"><code>GETS_INT</code></a> (38) - Get input integer</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Example usage</h2>
+
+        <div class="instruction-example" id="MOV">
+          <div class="instruction-info">
+            <h3>MOV (5)</h3>
+            <p>Move data from one register to another or load an immediate value.</p>
+          </div>
+          <pre class="instruction-code">
+MOV AX, 10    ; Load 10 into AX
+MOV BX, AX    ; Copy value from AX to BX
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="ADD">
+          <div class="instruction-info">
+            <h3>ADD (6)</h3>
+            <p>Add two registers or values and store the result in the destination register.</p>
+          </div>
+          <pre class="instruction-code">
+ADD AX, BX    ; AX = AX + BX
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="SUB">
+          <div class="instruction-info">
+            <h3>SUB (7)</h3>
+            <p>Subtract the source operand from the destination operand.</p>
+          </div>
+          <pre class="instruction-code">
+SUB AX, 1     ; AX = AX - 1
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="MUL">
+          <div class="instruction-info">
+            <h3>MUL (8)</h3>
+            <p>Multiply two values and store the result in the destination register.</p>
+          </div>
+          <pre class="instruction-code">
+MUL AX, BX    ; AX = AX * BX
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="DIV">
+          <div class="instruction-info">
+            <h3>DIV (9)</h3>
+            <p>Divide the destination operand by the source operand.</p>
+          </div>
+          <pre class="instruction-code">
+DIV AX, BX    ; AX = AX / BX
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="OUT">
+          <div class="instruction-info">
+            <h3>OUT (10)</h3>
+            <p>Print an integer stored in a register to the output.</p>
+          </div>
+          <pre class="instruction-code">
+OUT AX       ; Print value in AX
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="HALT">
+          <div class="instruction-info">
+            <h3>HALT (11)</h3>
+            <p>Stop the program execution.</p>
+          </div>
+          <pre class="instruction-code">
+HALT        ; Terminate program
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="START">
+          <div class="instruction-info">
+            <h3>START (12)</h3>
+            <p>Define the program entry point.</p>
+          </div>
+          <pre class="instruction-code">
+START       ; Program start label
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="MOV_STR">
+          <div class="instruction-info">
+            <h3>MOV_STR (13)</h3>
+            <p>Move a string value into a register.</p>
+          </div>
+          <pre class="instruction-code">
+MOV_STR DX, "Hello World"  ; Move string into DX
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="PUTS">
+          <div class="instruction-info">
+            <h3>PUTS (14)</h3>
+            <p>Print a string literal.</p>
+          </div>
+          <pre class="instruction-code">
+PUTS "Test"      ; Output string literal
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="JMP">
+          <div class="instruction-info">
+            <h3>JMP (15)</h3>
+            <p>Jump unconditionally to a label.</p>
+          </div>
+          <pre class="instruction-code">
+JMP loop    ; Jump to label 'loop'
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="JNZ">
+          <div class="instruction-info">
+            <h3>JNZ (16)</h3>
+            <p>Jump if zero flag is not set (last result was not zero).</p>
+          </div>
+          <pre class="instruction-code">
+JNZ loop    ; Jump if AX != 0
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="AND">
+          <div class="instruction-info">
+            <h3>AND (18)</h3>
+            <p>Perform bitwise AND on two operands.</p>
+          </div>
+          <pre class="instruction-code">
+AND AX, BX    ; AX = AX & BX
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="GETS_STR">
+          <div class="instruction-info">
+            <h3>GETS_STR (19)</h3>
+            <p>Get input string from user and store in register or memory.</p>
+          </div>
+          <pre class="instruction-code">
+GETS_STR DX  ; Input string into DX
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="PSTR">
+          <div class="instruction-info">
+            <h3>PSTR (35)</h3>
+            <p>Print a string pointer to console.</p>
+          </div>
+          <pre class="instruction-code">
+PSTR DX     ; Print string pointer in DX
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="CMP_STR">
+          <div class="instruction-info">
+            <h3>CMP_STR (37)</h3>
+            <p>Compare two strings and set flags accordingly.</p>
+          </div>
+          <pre class="instruction-code">
+CMP_STR DX, BX   ; Compare strings in DX and BX
+          </pre>
+        </div>
+
+        <div class="instruction-example" id="GETS_INT">
+          <div class="instruction-info">
+            <h3>GETS_INT (38)</h3>
+            <p>Get input integer from user.</p>
+          </div>
+          <pre class="instruction-code">
+GETS_INT AX   ; Input integer into AX
+          </pre>
+        </div>
+
+      </section>
+      <div style="margin-top: 3em">
+  <a href="syntax.html" style="
+    display: inline-block;
+    padding: 0.75em 1.5em;
+    background-color: #007c91;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,124,145,0.4);
+    transition: background-color 0.3s ease;
+  " onmouseover="this.style.backgroundColor='#005f65';" onmouseout="this.style.backgroundColor='#007c91';">
+    Go to Syntax Page
+  </a>
+</div>
+
+    </main>
+  </div>
+</body>
+</html>
