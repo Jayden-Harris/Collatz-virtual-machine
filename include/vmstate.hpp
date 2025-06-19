@@ -10,11 +10,9 @@ enum class Registers : uint8_t {
   BX = 21,
   CX = 22,
   DX = 23,
-  IP = 24,
-  SP = 25,
-  EX = 26,
-  FX = 27,
-  GX = 28,
+  EX = 24,
+  FX = 25,
+  GX = 26,
 };
 
 inline const std::unordered_map<std::string, Registers> registerMap = {
@@ -31,7 +29,7 @@ inline const std::unordered_map<std::string, Registers> registerMap = {
 
 struct VMstate {
   std::vector<std::string> memory;   
-  std::vector<std::string> string_memory; // for storing string literals 
+  std::vector<std::string> string_memory; 
   std::vector<int> registers;
   uint64_t pc;
 
