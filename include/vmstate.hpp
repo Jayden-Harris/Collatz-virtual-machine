@@ -23,8 +23,6 @@ inline const std::unordered_map<std::string, Registers> registerMap = {
   {"EX", Registers::EX},
   {"FX", Registers::FX},
   {"GX", Registers::GX},
-  {"IP", Registers::IP},
-  {"SP", Registers::SP}
 };
 
 struct VMstate {
