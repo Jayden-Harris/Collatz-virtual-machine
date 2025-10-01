@@ -8,6 +8,17 @@
 #include <unordered_map>
 #include <collatz.hpp>
 #include "assembler.hpp"
+#include "syscall.hpp"
+
+// Remove comments (everything after ';')
+std::string strip_comment(const std::string& line) {
+  size_t pos = line.find(';');
+  if (pos != std::string::npos) {
+      return line.substr(0, pos);  // Keep only code before ';'
+  }
+  return line;
+}
+
 
 // Checks if a string is enclosed in double quotes, like: "Hello"
 bool is_quoted_string(const std::string& str) {
@@ -88,22 +99,25 @@ std::unordered_map<std::string, int> collect_labels_and_lines(
 
   std::string line;
   while (std::getline(file, line)) {
-      lines.push_back(line);                    // Store each line for second pass
+    std::string code_line = strip_comment(line);  // Remove comments
+    if (code_line.empty()) continue;              // Skip empty lines
 
-      auto tokens = split_line(line);           // Tokenize
-      if (tokens.empty()) continue;
+    lines.push_back(code_line);                   // Store for second pass
 
-      if (tokens[0].back() == ':') {            // If line starts with a label (e.g. START:)
-          std::string label = tokens[0].substr(0, tokens[0].size() - 1); // Strip colon
-          if (label_table.count(label)) {
-              std::cerr << "Error: Duplicate label: " << label << std::endl;
-              return {};
-          }
-          label_table[label] = total_instruction_count; // Store label's position
-          tokens.erase(tokens.begin());                 // Remove label from tokens
+    auto tokens = split_line(code_line);          // Tokenize
+    if (tokens.empty()) continue;
+
+    if (tokens[0].back() == ':') {            // If line starts with a label (e.g. START:)
+      std::string label = tokens[0].substr(0, tokens[0].size() - 1); // Strip colon
+      if (label_table.count(label)) {
+        std::cerr << "Error: Duplicate label: " << label << std::endl;
+        return {};
       }
+      label_table[label] = total_instruction_count; // Store label's position
+      tokens.erase(tokens.begin());                 // Remove label from tokens
+    }
 
-      total_instruction_count += static_cast<int>(tokens.size()); // Estimate instruction size
+    total_instruction_count += static_cast<int>(tokens.size()); // Estimate instruction size
   }
 
   return label_table;
@@ -172,6 +186,8 @@ bool process_tokens_to_instructions(
           instructions.push_back(str_index + 3);                   // Reference with offset
       } else if (label_table.count(token)) {
           instructions.push_back(label_table.at(token));           // Replace label with address
+      } else if (is_syscall(token)){
+          instructions.push_back(get_syscall_from_string(token));
       } else {
           // Try parsing as a literal integer
           try {

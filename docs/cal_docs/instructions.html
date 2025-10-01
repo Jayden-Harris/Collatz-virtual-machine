@@ -28,15 +28,18 @@
       color: white;
       padding: 1.5em;
       box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
     }
 
     .sidebar h2 {
-      margin-top: 0;
+      margin: 0 0 1em 0;
       font-size: 1.5em;
+      font-weight: 600;
     }
 
     .sidebar nav {
-      margin-top: 2em;
+      flex-grow: 1;
       display: flex;
       flex-direction: column;
     }
@@ -45,6 +48,7 @@
       color: #bbb;
       text-decoration: none;
       margin-bottom: 1em;
+      font-weight: 500;
       transition: color 0.2s ease;
     }
 
@@ -54,90 +58,113 @@
 
     .sidebar nav a.active {
       color: white;
-      font-weight: bold;
+      font-weight: 700;
+      text-decoration: underline;
     }
 
-    .content {
+    main.content {
       margin-left: 260px; /* sidebar width + gap */
-      padding: 2em;
-      max-width: 800px;
+      padding: 2.5em 3em;
+      max-width: 900px;
     }
 
     header h1 {
-      font-size: 2.5em;
-      margin-bottom: 0.2em;
+      font-size: 2.8em;
+      margin-bottom: 0.1em;
+      font-weight: 700;
+      color: #007c91;
     }
 
     .subtitle {
-      font-size: 1.1em;
-      color: #666;
-      margin-bottom: 1em;
+      font-size: 1.2em;
+      color: #555;
+      margin-bottom: 2em;
+      font-weight: 400;
     }
 
     section h2 {
-      margin-top: 2em;
-      font-size: 1.6em;
-      border-bottom: 2px solid #00acc1;
+      margin-top: 2.5em;
+      font-size: 1.8em;
+      font-weight: 700;
+      border-bottom: 3px solid #007c91;
       padding-bottom: 0.3em;
-      margin-bottom: 1em;
+      margin-bottom: 1.5em;
+      color: #007c91;
     }
 
     ul {
-      line-height: 1.6;
+      line-height: 1.7;
+      padding-left: 1.25em;
+      margin-bottom: 3em;
     }
 
-    code {
-      background-color: #eaeaea;
-      padding: 0.15em 0.3em;
-      border-radius: 3px;
-      font-family: 'Courier New', Courier, monospace;
+    ul li {
+      margin-bottom: 0.7em;
+      font-size: 1.05em;
     }
 
     ul li a {
       color: #007c91;
       text-decoration: none;
+      font-weight: 600;
     }
 
     ul li a:hover {
       text-decoration: underline;
     }
 
-    /* Instruction + example blocks */
-    .instruction-example {
-      display: flex;
-      gap: 1.5em;
-      margin-bottom: 2.5em;
-      flex-wrap: wrap;
+    /* Table styling for example usage */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 3em;
     }
-
-    .instruction-info {
-      flex: 1 1 250px;
-      min-width: 250px;
+    thead tr {
+      background-color: #007c91;
+      color: white;
     }
-
-    .instruction-info h3 {
-      margin-top: 0;
-      color: #007c91;
+    th, td {
+      padding: 0.75em 1em;
+      border: 1px solid #ccc;
+      vertical-align: top;
     }
-
-    .instruction-info p {
-      font-size: 1em;
-      line-height: 1.4;
+    th {
+      text-align: left;
+      font-weight: 700;
     }
-
-    pre.instruction-code {
-      flex: 1 1 300px;
-      background: #272822;
-      color: #f8f8f2;
-      padding: 1em;
-      border-radius: 6px;
-      overflow-x: auto;
+    td code {
+      background: #f0f0f0;
+      padding: 0.1em 0.3em;
+      border-radius: 3px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    pre {
+      margin: 0;
       font-family: 'Courier New', Courier, monospace;
       white-space: pre-wrap;
       word-break: break-word;
-      min-width: 300px;
-      box-shadow: 0 0 10px rgba(0,172,193,0.4);
-      user-select: all;
+      background: #272822;
+      color: #f8f8f2;
+      padding: 0.5em 1em;
+      border-radius: 5px;
+      box-shadow: 0 0 6px rgba(0,124,145,0.4);
+    }
+
+    /* Button style consistent with Registers page */
+    .btn {
+      display: inline-block;
+      padding: 0.85em 1.8em;
+      background-color: #007c91;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 3px 7px rgba(0,124,145,0.5);
+      transition: background-color 0.3s ease;
+      margin-top: 2em;
+    }
+    .btn:hover {
+      background-color: #005f65;
     }
 
     /* Responsive tweaks */
@@ -150,20 +177,50 @@
         width: 100%;
         height: auto;
         position: relative;
+        padding: 1em 1.5em;
       }
 
-      .content {
+      main.content {
         margin-left: 0;
         max-width: 100%;
+        padding: 1.5em 1.5em 3em 1.5em;
       }
 
-      .instruction-example {
-        flex-direction: column;
+      table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
       }
 
-      .instruction-info, pre.instruction-code {
-        min-width: auto;
-        flex: 1 1 auto;
+      thead tr {
+        display: none;
+      }
+
+      tr {
+        margin-bottom: 1.25em;
+        border-bottom: 2px solid #007c91;
+        padding-bottom: 1em;
+      }
+
+      td {
+        border: none;
+        padding-left: 50%;
+        position: relative;
+      }
+
+      td::before {
+        position: absolute;
+        top: 0.75em;
+        left: 1em;
+        width: 45%;
+        padding-right: 1em;
+        white-space: nowrap;
+        font-weight: 700;
+        color: #007c91;
+        content: attr(data-label);
+      }
+
+      pre {
+        padding: 0.75em 1em;
       }
     }
   </style>
@@ -187,221 +244,155 @@
         <h1>CAL Instructions</h1>
         <p class="subtitle">Learn how to write and use CAL instructions effectively</p>
       </header>
-
+      <section>
+  <h2>Understanding CAL Instructions and Opcodes</h2>
+  <p>
+    CAL instructions form the core commands that drive the behavior of programs written in the CAL assembly language. Each instruction is represented internally by an <code>opcode</code> — a unique numeric code that the CAL Virtual Machine interprets to perform specific operations such as arithmetic calculations, data movement, input/output, and flow control.
+  </p>
+  <p>
+    The OPCODES defined here serve as identifiers for these fundamental operations. By associating human-readable mnemonics (like <code>MOV</code>, <code>ADD</code>, or <code>JMP</code>) with numeric values, the machine can efficiently decode and execute instructions at runtime.
+  </p>
+  <p>
+    These instructions enable CAL to manipulate registers and memory, perform arithmetic and logical operations, handle input/output tasks, and control program flow. Understanding these opcodes and how they map to instruction behavior is essential for writing effective CAL programs and for working with the assembler or virtual machine internals.
+  </p>
+  <p>
+    Below is the complete list of currently implemented OPCODES in CAL, along with their assigned numeric values. These opcodes are used throughout the language to specify the operation each instruction performs.
+  </p>
+</section>
       <section>
         <h2>Instruction operation codes</h2>
-        <ul>
-          <li><a href="#MOV"><code>MOV</code></a> (5) - Move data between registers or memory</li>
-          <li><a href="#ADD"><code>ADD</code></a> (6) - Add two values</li>
-          <li><a href="#SUB"><code>SUB</code></a> (7) - Subtract one value from another</li>
-          <li><a href="#MUL"><code>MUL</code></a> (8) - Multiply two values</li>
-          <li><a href="#DIV"><code>DIV</code></a> (9) - Divide two values</li>
-          <li><a href="#OUT"><code>OUT</code></a> (10) - Print an integer stored in a register</li>
-          <li><a href="#HALT"><code>HALT</code></a> (11) - Stop program execution</li>
-          <li><a href="#START"><code>START</code></a> (12) - Program entry point</li>
-          <li><a href="#MOV_STR"><code>MOV_STR</code></a> (13) - Move a string value into a register</li>
-          <li><a href="#PUTS"><code>PUTS</code></a> (14) - Output a string literal to console</li>
-          <li><a href="#JMP"><code>JMP</code></a> (15) - Jump to a specified label</li>
-          <li><a href="#JNZ"><code>JNZ</code></a> (16) - Jump if not zero</li>
-          <li><a href="#AND"><code>AND</code></a> (18) - Bitwise AND operation</li>
-          <li><a href="#GETS_STR"><code>GETS_STR</code></a> (19) - Get input string</li>
-          <li><a href="#PSTR"><code>PSTR</code></a> (35) - Print a string stored in a register</li>
-          <li><a href="#CMP_STR"><code>CMP_STR</code></a> (37) - Compare two strings</li>
-          <li><a href="#GETS_INT"><code>GETS_INT</code></a> (38) - Get input integer</li>
-        </ul>
+        <pre class="instruction-code">
+// OPCODES enum
+enum class OPCODES : uint8_t {
+  LOAD = 3, 
+  STORE = 4, 
+  MOV = 5, 
+  ADD = 6, 
+  SUB = 7,
+  MUL = 8, 
+  DIV = 9,
+  OUT = 10,
+  HALT = 11,
+  START = 12,
+  MOV_STR = 13,
+  PUTS = 14,
+  JMP = 15,
+  JNZ = 16,
+  MOV_REG = 17,
+  AND = 18,
+  GETS_STR = 19,
+  PSTR = 35,
+  EXC = 36,
+  CMP_STR = 37,
+  GETS_INT = 38,
+  SYS_CALL = 39,
+  UNK = 0 
+};
+        </pre>
       </section>
 
       <section>
         <h2>Example usage</h2>
-
-        <div class="instruction-example" id="MOV">
-          <div class="instruction-info">
-            <h3>MOV (5)</h3>
-            <p>Move data from one register to another or load an immediate value.</p>
-          </div>
-          <pre class="instruction-code">
-MOV AX, 10    ; Load 10 into AX
-MOV BX, AX    ; Copy value from AX to BX
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="ADD">
-          <div class="instruction-info">
-            <h3>ADD (6)</h3>
-            <p>Add two registers or values and store the result in the destination register.</p>
-          </div>
-          <pre class="instruction-code">
-ADD AX, BX    ; AX = AX + BX
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="SUB">
-          <div class="instruction-info">
-            <h3>SUB (7)</h3>
-            <p>Subtract the source operand from the destination operand.</p>
-          </div>
-          <pre class="instruction-code">
-SUB AX, 1     ; AX = AX - 1
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="MUL">
-          <div class="instruction-info">
-            <h3>MUL (8)</h3>
-            <p>Multiply two values and store the result in the destination register.</p>
-          </div>
-          <pre class="instruction-code">
-MUL AX, BX    ; AX = AX * BX
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="DIV">
-          <div class="instruction-info">
-            <h3>DIV (9)</h3>
-            <p>Divide the destination operand by the source operand.</p>
-          </div>
-          <pre class="instruction-code">
-DIV AX, BX    ; AX = AX / BX
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="OUT">
-          <div class="instruction-info">
-            <h3>OUT (10)</h3>
-            <p>Print an integer stored in a register to the output.</p>
-          </div>
-          <pre class="instruction-code">
-OUT AX       ; Print value in AX
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="HALT">
-          <div class="instruction-info">
-            <h3>HALT (11)</h3>
-            <p>Stop the program execution.</p>
-          </div>
-          <pre class="instruction-code">
-HALT        ; Terminate program
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="START">
-          <div class="instruction-info">
-            <h3>START (12)</h3>
-            <p>Define the program entry point.</p>
-          </div>
-          <pre class="instruction-code">
-START       ; Program start label
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="MOV_STR">
-          <div class="instruction-info">
-            <h3>MOV_STR (13)</h3>
-            <p>Move a string value into a register.</p>
-          </div>
-          <pre class="instruction-code">
-MOV_STR DX, "Hello World"  ; Move string into DX
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="PUTS">
-          <div class="instruction-info">
-            <h3>PUTS (14)</h3>
-            <p>Print a string literal.</p>
-          </div>
-          <pre class="instruction-code">
-PUTS "Test"      ; Output string literal
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="JMP">
-          <div class="instruction-info">
-            <h3>JMP (15)</h3>
-            <p>Jump unconditionally to a label.</p>
-          </div>
-          <pre class="instruction-code">
-JMP loop    ; Jump to label 'loop'
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="JNZ">
-          <div class="instruction-info">
-            <h3>JNZ (16)</h3>
-            <p>Jump if zero flag is not set (last result was not zero).</p>
-          </div>
-          <pre class="instruction-code">
-JNZ loop    ; Jump if AX != 0
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="AND">
-          <div class="instruction-info">
-            <h3>AND (18)</h3>
-            <p>Perform bitwise AND on two operands.</p>
-          </div>
-          <pre class="instruction-code">
-AND AX, BX    ; AX = AX & BX
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="GETS_STR">
-          <div class="instruction-info">
-            <h3>GETS_STR (19)</h3>
-            <p>Get input string from user and store in register or memory.</p>
-          </div>
-          <pre class="instruction-code">
-GETS_STR DX  ; Input string into DX
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="PSTR">
-          <div class="instruction-info">
-            <h3>PSTR (35)</h3>
-            <p>Print a string pointer to console.</p>
-          </div>
-          <pre class="instruction-code">
-PSTR DX     ; Print string pointer in DX
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="CMP_STR">
-          <div class="instruction-info">
-            <h3>CMP_STR (37)</h3>
-            <p>Compare two strings and set flags accordingly.</p>
-          </div>
-          <pre class="instruction-code">
-CMP_STR DX, BX   ; Compare strings in DX and BX
-          </pre>
-        </div>
-
-        <div class="instruction-example" id="GETS_INT">
-          <div class="instruction-info">
-            <h3>GETS_INT (38)</h3>
-            <p>Get input integer from user.</p>
-          </div>
-          <pre class="instruction-code">
-GETS_INT AX   ; Input integer into AX
-          </pre>
-        </div>
-
+        <table>
+          <thead>
+            <tr>
+              <th>Instruction</th>
+              <th>Description</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Instruction"><code>MOV (5)</code></td>
+              <td data-label="Description">Move data from one register to another or load an immediate value.</td>
+              <td data-label="Example"><pre>MOV AX, 10
+MOV BX, AX</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>ADD (6)</code></td>
+              <td data-label="Description">Add two registers or values and store the result in the destination register.</td>
+              <td data-label="Example"><pre>ADD AX, BX</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>SUB (7)</code></td>
+              <td data-label="Description">Subtract the source operand from the destination operand.</td>
+              <td data-label="Example"><pre>SUB AX, 1</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>MUL (8)</code></td>
+              <td data-label="Description">Multiply two values and store the result in the destination register.</td>
+              <td data-label="Example"><pre>MUL AX, BX</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>DIV (9)</code></td>
+              <td data-label="Description">Divide the destination operand by the source operand.</td>
+              <td data-label="Example"><pre>DIV AX, BX</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>OUT (10)</code></td>
+              <td data-label="Description">Print an integer stored in a register to the output.</td>
+              <td data-label="Example"><pre>OUT AX</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>HALT (11)</code></td>
+              <td data-label="Description">Stop the program execution.</td>
+              <td data-label="Example"><pre>HALT</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>START (12)</code></td>
+              <td data-label="Description">Define the program entry point.</td>
+              <td data-label="Example"><pre>START</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>MOV_STR (13)</code></td>
+              <td data-label="Description">Move a string value into a register.</td>
+              <td data-label="Example"><pre>MOV_STR DX, "Hello World"</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>PUTS (14)</code></td>
+              <td data-label="Description">Print a string literal.</td>
+              <td data-label="Example"><pre>PUTS "Test"</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>JMP (15)</code></td>
+              <td data-label="Description">Jump unconditionally to a label.</td>
+              <td data-label="Example"><pre>JMP loop</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>JNZ (16)</code></td>
+              <td data-label="Description">Jump if zero flag is not set (last result was not zero).</td>
+              <td data-label="Example"><pre>JNZ loop</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>AND (18)</code></td>
+              <td data-label="Description">Perform bitwise AND on two operands.</td>
+              <td data-label="Example"><pre>AND AX, BX</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>GETS_STR (19)</code></td>
+              <td data-label="Description">Get input string from user and store in register or memory.</td>
+              <td data-label="Example"><pre>GETS_STR DX</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>PSTR (35)</code></td>
+              <td data-label="Description">Print a string pointer to console.</td>
+              <td data-label="Example"><pre>PSTR DX</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>CMP_STR (37)</code></td>
+              <td data-label="Description">Compare two strings and set flags accordingly.</td>
+              <td data-label="Example"><pre>CMP_STR DX, BX</pre></td>
+            </tr>
+            <tr>
+              <td data-label="Instruction"><code>GETS_INT (38)</code></td>
+              <td data-label="Description">Get input integer from user.</td>
+              <td data-label="Example"><pre>GETS_INT AX</pre></td>
+            </tr>
+          </tbody>
+        </table>
       </section>
-      <div style="margin-top: 3em">
-  <a href="syntax.html" style="
-    display: inline-block;
-    padding: 0.75em 1.5em;
-    background-color: #007c91;
-    color: white;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    box-shadow: 0 3px 6px rgba(0,124,145,0.4);
-    transition: background-color 0.3s ease;
-  " onmouseover="this.style.backgroundColor='#005f65';" onmouseout="this.style.backgroundColor='#007c91';">
-    Go to Syntax Page
-  </a>
-</div>
 
+      <a href="syntax.html" class="btn">Go to Syntax Page</a>
     </main>
   </div>
 </body>

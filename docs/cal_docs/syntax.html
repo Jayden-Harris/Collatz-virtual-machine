@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CAL Syntax</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: fixed;
+      width: 220px;
+      height: 100vh;
+      background-color: #1e1e2f;
+      color: white;
+      padding: 1.5em;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar h2 {
+      margin-top: 0;
+      font-size: 1.5em;
+    }
+
+    .sidebar nav {
+      margin-top: 2em;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar nav a {
+      color: #bbb;
+      text-decoration: none;
+      margin-bottom: 1em;
+      transition: color 0.2s ease;
+    }
+
+    .sidebar nav a:hover {
+      color: white;
+    }
+
+    .sidebar nav a.active {
+      color: white;
+      font-weight: bold;
+    }
+
+    .content {
+      margin-left: 260px; /* sidebar width + gap */
+      padding: 2em;
+      max-width: 800px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+    }
+
+    .subtitle {
+      font-size: 1.1em;
+      color: #666;
+      margin-bottom: 1em;
+    }
+
+    section h2 {
+      margin-top: 2em;
+      font-size: 1.6em;
+      border-bottom: 2px solid #00acc1;
+      padding-bottom: 0.3em;
+      margin-bottom: 1em;
+    }
+
+    section h3 {
+      margin-top: 1.5em;
+      font-size: 1.3em;
+      color: #007c91;
+      margin-bottom: 0.5em;
+    }
+
+    ul {
+      line-height: 1.6;
+    }
+
+    /* UPDATED: inline code no background or padding, just monospace font */
+    code {
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 1em;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: 0 0 10px rgba(0,172,193,0.4);
+      user-select: all;
+      margin-top: 0.5em;
+    }
+
+    /* Responsive tweaks */
+    @media screen and (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .content {
+        margin-left: 0;
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>CAL Docs</h2>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="registers.html">Registers</a>
+        <a href="instructions.html">Instructions</a>
+        <a href="syntax.html" class="active">Syntax</a>
+        <a href="syscalls.html">Syscalls</a>
+        <a href="examples.html">Examples</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header>
+        <h1>CAL Syntax</h1>
+        <p class="subtitle">Rules and conventions for writing valid CAL assembly code</p>
+      </header>
+
+      <section>
+        <h2>CAL Syntax Overview</h2>
+        <p>This section describes the rules for writing valid CAL assembly source code. Understanding the syntax helps you write correct and readable programs.</p>
+
+        <h3>Line Structure</h3>
+        <p>Each line may contain an optional label, an instruction, operands, and an optional comment. Labels should be capitalized for consistency.</p>
+        <pre><code>
+LABEL: 
+  MOV AX, 10    ; Move 10 into AX
+  ADD AX, BX    ; Add BX to AX
+  JMP label     ; Jump back to label
+        </code></pre>
+
+        <h3>Labels</h3>
+        <p>Labels mark positions in the program and end with a colon (<code>:</code>). They must be unique identifiers.</p>
+        <pre><code>
+START:
+  MOV AX, 1
+        </code></pre>
+
+        <h3>Operands</h3>
+        <ul>
+          <li><strong>Registers:</strong> AX, BX, CX, DX, etc.</li>
+          <li><strong>Immediate values:</strong> integers such as 1, 100, or -5</li>
+          <li><strong>Labels:</strong> used as jump destinations or references</li>
+          <li><strong>Strings:</strong> enclosed in double quotes <code>"like this"</code>, with support for escape sequences</li>
+        </ul>
+
+        <h3>Strings and Escape Sequences</h3>
+        <p>Strings must be enclosed in double quotes. Escape sequences allow special characters inside strings:</p>
+        <ul>
+          <li><code>\n</code> - Newline</li>
+          <li><code>\t</code> - Tab</li>
+          <li><code>\r</code> - Carriage return</li>
+          <li><code>\\</code> - Backslash</li>
+          <li><code>\"</code> - Double quote</li>
+        </ul>
+
+        <h3>Comments</h3>
+        <p>Comments start with <code>;</code> or <code>//</code> and continue to the end of the line. They are ignored by the assembler.</p>
+        <pre><code>
+MOV AX, 1     ; This is a comment
+ADD AX, BX   // Another comment style
+        </code></pre>
+
+        <h3>Case Sensitivity</h3>
+        <p>Instructions, registers, and labels are case-insensitive for ease of use.</p>
+
+        <h3>Example</h3>
+        <pre><code>
+START:
+  MOV AX, 10      ; Load 10 into AX
+  MOV BX, 20      ; Load 20 into BX
+  ADD AX, BX      ; AX = AX + BX
+  JMP START       ; Loop forever
+        </code></pre>
+      </section>
+
+      <div style="margin-top: 3em">
+        <a href="instructions.html" style="
+          display: inline-block;
+          padding: 0.75em 1.5em;
+          background-color: #007c91;
+          color: white;
+          border-radius: 5px;
+          text-decoration: none;
+          font-weight: bold;
+          box-shadow: 0 3px 6px rgba(0,124,145,0.4);
+          transition: background-color 0.3s ease;
+        " onmouseover="this.style.backgroundColor='#005f65';" onmouseout="this.style.backgroundColor='#007c91';">
+          Go to Instructions Page
+        </a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

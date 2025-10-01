@@ -1,16 +1,10 @@
 
-
 START
 
-MOV AX, 1
-MOV BX, 11
-MOV DX, 1
+PUTS "Enter your directory name: "
+GETS_STR, DX
 
-LOOP:
-  OUT AX
-  ADD AX, DX
-  MOV CX, AX
-  SUB CX, BX
-  JNZ CX, LOOP
+MKDIR DX
+
 
 HALT

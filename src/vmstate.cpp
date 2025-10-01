@@ -7,6 +7,7 @@
 #include <fstream>
 #include "instructions.hpp"
 #include "command_line.hpp"
+#include "syscall.hpp"
 
 uint8_t get_register_from_string(const std::string& reg_str) {
   auto it = registerMap.find(reg_str);
@@ -178,24 +179,40 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
         break;
       }
 
-      case OPCODES::EXC: {
+      case OPCODES::LDIR: {
         int reg = instructions[ip++];
         int str_index = vmstate.registers[reg];
-        std::string command;
+
+        std::string dir_name;
 
         if (str_index >= 0 && static_cast<size_t>(str_index) < vmstate.string_memory.size()) {
-           command = vmstate.string_memory[str_index];
-           if (command == "exit") {
-            return;
-           } else {
-            execute_command(command);
-           }
-          }else {
-              std::cerr << "Invalid string index in register " << reg << std::endl;
+          dir_name = vmstate.string_memory[str_index];
+          std::vector<std::filesystem::directory_entry> directories = list_directories(dir_name);
+          for (const auto& entry : directories) {
+              std::cout << entry.path().filename().string() << std::endl;
           }
-
+        } else {
+          dir_name = "vm_filesystem";
+          std::vector<std::filesystem::directory_entry> directories = list_directories(dir_name);
+          for (const auto& entry : directories) {
+              std::cout << entry.path().filename().string() << std::endl;
+          }
+        }
         break;
       }
+
+      case OPCODES::MKDIR: {
+        int reg = instructions[ip++];
+        int str_index = vmstate.registers[reg];
+
+        std::string dir_name;
+
+        if (str_index >= 0 && static_cast<size_t>(str_index) < vmstate.string_memory.size()) {
+          dir_name = vmstate.string_memory[str_index];
+          createDirectory(dir_name);
+        }
+        break;
+      } 
 
       case OPCODES::MOV_STR: {
         int reg = instructions[ip++];
@@ -227,6 +244,11 @@ void execute_program(VMstate& vmstate, std::vector<int> instructions) {
         vmstate.registers[dest] = result ? 1 : 0;
         break;
 
+      }
+
+      case OPCODES::CALL: {
+        int syscall = instructions[ip++];
+        handle_syscall(syscall);
       }
 
       case OPCODES::HALT: {

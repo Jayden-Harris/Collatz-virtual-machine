@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <unordered_map>
+#include <stdio.h>
 
 // OPCODES enum
 enum class OPCODES : uint8_t {
@@ -27,7 +28,9 @@ enum class OPCODES : uint8_t {
   EXC = 36,
   CMP_STR = 37,
   GETS_INT = 38,
-  SYS_CALL = 39,
+  CALL = 39,
+  MKDIR = 40,
+  LDIR = 41,
   UNK = 0 
 };
 
@@ -55,6 +58,9 @@ inline const std::unordered_map<std::string, OPCODES> opcodeMap = {
   {"EXC", OPCODES::EXC},
   {"CMP_STR", OPCODES::CMP_STR},
   {"GETS_INT", OPCODES::GETS_INT},
+  {"CALL", OPCODES::CALL},
+  {"MKDIR", OPCODES::MKDIR},
+  {"LDIR", OPCODES::LDIR},
 };
 
 uint8_t get_opcode_from_string(const std::string& s);
